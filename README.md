@@ -1,10 +1,10 @@
 # teenyjs
-A 0-Calorie javascript module story
+A simple 0-calorie javascript module story
 
 # Install
-'''
+```
 bower install teenyjs --save
-'''
+```
 
 # Define a module
 ```
