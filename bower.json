@@ -1,0 +1,24 @@
+{
+  "name": "teenyjs",
+  "version": "0.0.0",
+  "homepage": "https://github.com/vision89/teenyjs.git",
+  "authors": [
+    "dlgulley411@gmail.com <dlgulley411@gmail.com>"
+  ],
+  "description": "Tiny javascript module story",
+  "main": "dist/teeny-min.js",
+  "keywords": [
+    "javascript",
+    "modules",
+    "teeny",
+    "teenyjs"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
