@@ -6,6 +6,11 @@ A simple 0-calorie javascript module story
 bower install teenyjs --save
 ```
 
+# Directions
+```
+Include teenyjs in your app before any modules you define.  Your modules can be included asynchronously.
+```
+
 # Define a module
 ```
 teenyjs.define( 'module_name',  ['dependency1', 'dependency2'], function ( dependency1, dependency2 ) {

@@ -14,11 +14,7 @@
 	 */
 	function buildModule( name ) {
 
-		/**
-		 * Since we begin loading from the event queue it's possible to hit this more than once, just exit if you fo
-		 * @param  {[type]} cache[name].data !             [description]
-		 * @return {[type]}                  [description]
-		 */
+		// Since we begin loading from the event queue it's possible to hit this more than once, just exit if you do
 		if ( cache[name].data !== undefined ) {
 
 			return;
@@ -27,6 +23,7 @@
 
 		var args = [];
 
+		//Build all the dependencies too
 		cache[name].deps.forEach( function ( dep ) {
 
 			if ( cache[dep].data === undefined ) {
@@ -39,6 +36,7 @@
 
 		});
 
+		//It's ready, build the module
 		cache[name].data = cache[name].moduleFunction.apply( undefined, args );
 
 	};
@@ -53,7 +51,7 @@
 		for ( var i = 0; i < deps.length; ++i ) {
 
 			//This is blowing the stack by recursively checking data on load, for now we'll just make sure any
-			//modules we load from the get go have all dependecies completely loaded
+			//modules we load from the get go have all dependecies completely built
 			if ( cache.hasOwnProperty( deps[i] ) === false || cache[deps[i]].data === undefined ) {
 
 				return false;
