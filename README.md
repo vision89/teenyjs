@@ -1,8 +1,10 @@
 # teenyjs
-An ultra-thin and simple to use module story
+A 0-Calorie javascript module story
 
 # Install
+'''
 bower install teenyjs --save
+'''
 
 # Define a module
 ```
