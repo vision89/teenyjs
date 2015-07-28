@@ -7,9 +7,8 @@ bower install teenyjs --save
 ```
 
 # Directions
-```
-Include teenyjs in your app before any modules you define.  Your modules can be included asynchronously.
-```
+Include teenyjs in your app before any modules you define.  Your modules can be included asynchronously, but teenyjs should not be.
+
 
 # Define a module
 ```
