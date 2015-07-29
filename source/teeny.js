@@ -120,26 +120,13 @@
 		}
 
 		//If there are no hindrances throw this on the event queue to build
-		if ( deps.length === 0 ) {
+		if ( deps.length === 0 || areDependenciesLoaded( deps ) === true ) {
 
 			setTimeout( function () {
 
 				buildModule( name );
 
 			});
-
-		} else {
-
-			if ( areDependenciesLoaded( deps ) === true ) {
-
-				//If were here all dependecies are already loaded, throw this on the event queue to build
-				setTimeout( function () {
-
-					buildModule( name );
-
-				});
-
-			}
 
 		}
 
