@@ -1,5 +1,6 @@
 # teenyjs
 A simple 0-calorie javascript module story
+This module system is in alpha, it is new and is still being tested!
 
 # Directions
 Include teenyjs in your app before any modules you define.  Your modules can be included asynchronously, but teenyjs should not be.
