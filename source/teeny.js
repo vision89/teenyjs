@@ -73,27 +73,50 @@
 	window.teenyjs.require = function ( names, scopedFunction ) {
 
 		var args = [];
+		var promises = [];
 
 		names.forEach( function ( name ) {
 
 			if ( cache.hasOwnProperty( name ) ) {
 
-				//If this module hasnt been set, set it now
-				if ( cache[name].data === undefined ) {
+				//We will load the dependencies asynchronously by putting them in promises
+				promises.push( new Promise( function ( resolve, reject ) {
+
+					try {
+
+						//If this module hasnt been set, set it now
+						if ( cache[name].data === undefined ) {
 
 
-					buildModule( name );
+							buildModule( name );
 
-				}
+						}
 
-				args.push( cache[name].data );
+						resolve( args.push( cache[name].data ) );
+
+					} catch ( e ) {
+
+						reject( e );
+
+					}
+
+				}));
 
 			}
 
 		});
 
-		//Execute the scoped function with the provided dependencies
-		scopedFunction.apply( undefined, args );
+		//All the dependencies are in promises, resolve them
+		Promise.all( promises ).then( function () {
+
+			//Execute the scoped function with the provided dependencies
+			scopedFunction.apply( undefined, args );
+
+		}, function ( e ) {
+
+				throw e;
+
+		});
 
 	};
 

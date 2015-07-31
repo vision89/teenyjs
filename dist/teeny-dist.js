@@ -1,0 +1,7 @@
+'use strict';(function(){var cache=Object.create(Object);window.teenyjs={};function buildModule(name){if(cache[name].data!==undefined){return;}
+var args=[];cache[name].deps.forEach(function(dep){if(cache[dep].data===undefined){buildModule(dep);}
+args.push(cache[dep].data);});cache[name].data=cache[name].moduleFunction.apply(undefined,args);};function areDependenciesLoaded(deps){for(var i=0;i<deps.length;++i){if(cache.hasOwnProperty(deps[i])===false||cache[deps[i]].data===undefined){return false;}}
+return true;};window.teenyjs.require=function(names,scopedFunction){var args=[];var promises=[];names.forEach(function(name){if(cache.hasOwnProperty(name)){promises.push(new Promise(function(resolve,reject){try{if(cache[name].data===undefined){buildModule(name);}
+resolve(args.push(cache[name].data));}catch(e){reject(e);}}));}});Promise.all(promises).then(function(){scopedFunction.apply(undefined,args);},function(e){throw e;});};window.teenyjs.define=function(name,deps,moduleFunction){if(cache.hasOwnProperty(name)){throw'module '+name+' is already defined';}
+cache[name]={deps:deps,moduleFunction:moduleFunction,data:undefined}
+if(deps.length===0||areDependenciesLoaded(deps)===true){setTimeout(function(){buildModule(name);});}};})();
