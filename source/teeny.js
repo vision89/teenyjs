@@ -75,39 +75,51 @@
 		var args = [];
 		var promises = [];
 
+		//Load the promises
 		names.forEach( function ( name ) {
 
-			if ( cache.hasOwnProperty( name ) ) {
+			//Load any unloaded module asynchronously with a promise
+			promises.push( new Promise( function ( resolve, reject ) {
 
-				//We will load the dependencies asynchronously by putting them in promises
-				promises.push( new Promise( function ( resolve, reject ) {
+				try {
 
-					try {
+					if ( cache.hasOwnProperty( name ) ) {
 
-						//If this module hasnt been set, set it now
-						if ( cache[name].data === undefined ) {
+						resolve( function () {
 
+							//If this hasn't been set, set it now
+							if  ( cache[name].data === undefined ) {
 
-							buildModule( name );
+								buildModule( name );
 
-						}
+							}
 
-						resolve( args.push( cache[name].data ) );
+						}() );
 
-					} catch ( e ) {
+					} else {
 
-						reject( e );
+						reject( 'Module ' + name + ' doesn\'t exist' );
 
 					}
 
-				}));
+				} catch ( e ) {
 
-			}
+					reject( e );
+
+				}
+
+			}));
 
 		});
 
 		//All the dependencies are in promises, resolve them
 		Promise.all( promises ).then( function () {
+
+			names.forEach( function ( name ) {
+
+				args.push( cache[name].data );
+
+			});
 
 			//Execute the scoped function with the provided dependencies
 			scopedFunction.apply( undefined, args );
