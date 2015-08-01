@@ -76,59 +76,75 @@
 		var promises = [];
 
 		//Load the promises
-		names.forEach( function ( name ) {
-
-			var deferred = Q.defer();
-
-			try {
-
-				if ( cache.hasOwnProperty( name ) ) {
-
-					deferred.resolve( function () {
-
-						//If this hasn't been set, set it now
-						if  ( cache[name].data === undefined ) {
-
-							buildModule( name );
-
-						}
-
-					}() );
-
-				} else {
-
-					deferred.reject( 'Module ' + name + ' doesn\'t exist' );
-
-				}
-
-			} catch ( e ) {
-
-				deferred.reject( e );
-
-			}
-
-			//Load any unloaded module asynchronously with a promise
-			promises.push( deferred.promise );
-
-		});
-
-		//All the dependencies are in promises, resolve them
-		Q.all( promises ).then( function () {
+		try {
 
 			names.forEach( function ( name ) {
 
-				args.push( cache[name].data );
+				//Load any unloaded module asynchronously with a promise
+				promises.push( new Promise( function ( resolve, reject ) {
+
+					if ( cache.hasOwnProperty( name ) ) {
+
+						resolve( function () {
+
+							//If this hasn't been set, set it now
+							if  ( cache[name].data === undefined ) {
+
+								buildModule( name );
+
+							}
+
+						}() );
+
+					} else {
+
+						reject( 'Module ' + name + ' doesn\'t exist' );
+
+					}
+
+				}));
 
 			});
 
-			//Execute the scoped function with the provided dependencies
+			//All the dependencies are in promises, resolve them
+			Promise.all( promises ).then( function () {
+
+				names.forEach( function ( name ) {
+
+					args.push( cache[name].data );
+
+				});
+
+				//Execute the scoped function with the provided dependencies
+				scopedFunction.apply( undefined, args );
+
+			}, function ( e ) {
+
+					throw e;
+
+			});
+
+		} catch ( e ) {
+
+			//Assume promises failed and we are in ie
+			promises = [];
+
+			//We will load synchronously
+			names.forEach( function ( name ) {
+
+				if ( cache.hasOwnProperty( name ) ) {
+
+					buildModule( name );
+
+					args.push( cache[name].data );
+
+				}
+
+			});
+
 			scopedFunction.apply( undefined, args );
 
-		}, function ( e ) {
-
-				throw e;
-
-		});
+		}
 
 	};
 
