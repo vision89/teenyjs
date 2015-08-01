@@ -1,6 +1,7 @@
 # teenyjs
 A simple 0-calorie javascript module story
-This module system is in alpha, it is new and is still being tested!
+
+# This module system is in alpha, it is new and is still being tested!
 
 # Directions
 Include teenyjs in your app before any modules you define.  Your modules can be included asynchronously, but teenyjs should not be.
@@ -9,6 +10,8 @@ Include teenyjs in your app before any modules you define.  Your modules can be 
 ```
 bower install teenyjs --save
 ```
+#Dependencies
+TeenyJS has a dependency on https://github.com/kriskowal/q, you will need to include the q library before including teenyjs
 
 # Define a module
 ```

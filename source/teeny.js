@@ -78,42 +78,42 @@
 		//Load the promises
 		names.forEach( function ( name ) {
 
-			//Load any unloaded module asynchronously with a promise
-			promises.push( new Promise( function ( resolve, reject ) {
+			var deferred = Q.defer();
 
-				try {
+			try {
 
-					if ( cache.hasOwnProperty( name ) ) {
+				if ( cache.hasOwnProperty( name ) ) {
 
-						resolve( function () {
+					deferred.resolve( function () {
 
-							//If this hasn't been set, set it now
-							if  ( cache[name].data === undefined ) {
+						//If this hasn't been set, set it now
+						if  ( cache[name].data === undefined ) {
 
-								buildModule( name );
+							buildModule( name );
 
-							}
+						}
 
-						}() );
+					}() );
 
-					} else {
+				} else {
 
-						reject( 'Module ' + name + ' doesn\'t exist' );
-
-					}
-
-				} catch ( e ) {
-
-					reject( e );
+					deferred.reject( 'Module ' + name + ' doesn\'t exist' );
 
 				}
 
-			}));
+			} catch ( e ) {
+
+				deferred.reject( e );
+
+			}
+
+			//Load any unloaded module asynchronously with a promise
+			promises.push( deferred.promise );
 
 		});
 
 		//All the dependencies are in promises, resolve them
-		Promise.all( promises ).then( function () {
+		Q.all( promises ).then( function () {
 
 			names.forEach( function ( name ) {
 
